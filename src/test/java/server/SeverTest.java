@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SeverTest {
 
-    private static final String CONFIG = Server.CONFIG;
+    private static final String CONFIG = "src/main/resources/settings.conf";
     private static final Properties PROPS = new Properties();
 
     @Test
@@ -29,10 +29,10 @@ public class SeverTest {
     @Test
     public void ServerSettings_test() throws IOException {
         Server server = new Server();
-        assertEquals(server.PORT, Helper.getPort(PROPS, CONFIG));
-        assertEquals(server.THREADS_NUMBER, Helper.getThreadsNumber(PROPS, CONFIG));
-        assertEquals(server.CLIENTS_IN_CHAT, Helper.getUsersOnlineCommand(PROPS, CONFIG));
-        assertEquals(server.clients.size(), 0);
+        assertEquals(server.getPort(), Helper.getPort(PROPS, CONFIG));
+        assertEquals(server.getThreadsNumber(), Helper.getThreadsNumber(PROPS, CONFIG));
+        assertEquals(server.getClientsInChat(), Helper.getUsersOnlineCommand(PROPS, CONFIG));
+        assertEquals(server.getClients().size(), 0);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SeverTest {
     public void usernameCommand_test() throws IOException {
         String USERNAME_COMMAND = Helper.getUsernameCommandText(PROPS, CONFIG);
         String username = "Test user";
-        String expected = username + ClientConnector.userEntersMessage;
+        String expected = username + ClientConnector.getUserEntersMessage();
         String actual = null;
         try (Socket clientSocket = new Socket(Helper.getHost(PROPS, CONFIG), Helper.getPort(PROPS, CONFIG))) {
             Scanner messageInput = new Scanner(clientSocket.getInputStream());
@@ -106,7 +106,7 @@ public class SeverTest {
     @Test
     public void exitCommand_test() throws IOException {
         String EXIT_COMMAND = Helper.getExitCommandText(PROPS, CONFIG);
-        String exitTextMessagePart = ClientConnector.userExitedMessage;
+        String exitTextMessagePart = ClientConnector.getUserExitedMessage();
         String serverOutput = null;
         try (Socket clientSocket = new Socket(Helper.getHost(PROPS, CONFIG), Helper.getPort(PROPS, CONFIG))) {
             Scanner messageInput = new Scanner(clientSocket.getInputStream());
